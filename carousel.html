@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<head>
+<!-- Include Tailwind CSS (CDN for quick setup) -->
+<link href="https://cdn.tailwindcss.com" rel="stylesheet">
+
+</head>
+
+<body>
+<!-- Carousel Container -->
+<div class="relative flex items-center overflow-hidden bg-gray-900 p-4 rounded-lg">
+    <!-- Previous Button -->
+    <button class="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-75 focus:outline-none" aria-label="Previous">
+        &#8249;
+    </button>
+
+    <!-- Carousel Track -->
+    <div class="carousel-track-wrapper w-full overflow-hidden">
+        <div class="flex gap-4 transition-transform duration-500 ease-in-out">
+            <!-- Review Item 1 -->
+            <div class="review-item bg-gray-800 text-white p-4 rounded-lg shadow-md w-full sm:w-full md:w-1/2 lg:w-1/3 xl:w-1/4 2xl:w-1/5">
+                <div class="flex items-center gap-2 mb-2">
+                    <img src="https://via.placeholder.com/50" alt="Reviewer" class="w-12 h-12 rounded-full">
+                    <div class="flex-grow">
+                        <h4 class="font-bold text-base capitalize">carl sandler</h4>
+                        <p class="text-sm text-gray-400">2024-05-30</p>
+                    </div>
+                    <img src="https://cdn.trustindex.io/assets/platform/Google/star/f.svg" alt="Google Icon" class="w-5 h-5">
+                </div>
+                <div class="mb-2">
+                    <span class="text-yellow-400">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+                </div>
+                <div>
+                    <p class="review-text">
+                        Showplace was quick to make me a reasonable offer and then to follow through with excellent
+                        communication. Pick up was efficient and all
+                        <span id="dots1">...</span><span id="more1" class="hidden"> their staff members were professional and friendly. I would highly recommend them to anyone looking for a reliable service provider.</span>
+                    </p>
+                    <button class="text-blue-400 font-semibold mt-2" onclick="toggleReadMore(1)">Read more</button>
+                </div>
+            </div>
+
+            <!-- Review Item 2 -->
+            <div class="review-item bg-gray-800 text-white p-4 rounded-lg shadow-md w-full sm:w-full md:w-1/2 lg:w-1/3 xl:w-1/4 2xl:w-1/5">
+                <div class="flex items-center gap-2 mb-2">
+                    <img src="https://via.placeholder.com/50" alt="Reviewer" class="w-12 h-12 rounded-full">
+                    <div class="flex-grow">
+                        <h4 class="font-bold text-base capitalize">Jeff Constable</h4>
+                        <p class="text-sm text-gray-400">2024-02-29</p>
+                    </div>
+                    <img src="https://cdn.trustindex.io/assets/platform/Google/star/f.svg" alt="Google Icon" class="w-5 h-5">
+                </div>
+                <div class="mb-2">
+                    <span class="text-yellow-400">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+                </div>
+                <div>
+                    <p class="review-text">
+                        We had an excellent experience with Showplace. They came highly recommended by an appraiser who
+                        was helping us evaluate the artwork
+                        <span id="dots2">...</span><span id="more2" class="hidden">. Their service was prompt, courteous, and they made the whole process seamless. Definitely would use them again.</span>
+                    </p>
+                    <button class="text-blue-400 font-semibold mt-2" onclick="toggleReadMore(2)">Read more</button>
+                </div>
+            </div>
+
+            <!-- Add more review items as needed -->
+        </div>
+    </div>
+
+    <!-- Next Button -->
+    <button class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-75 focus:outline-none" aria-label="Next">
+        &#8250;
+    </button>
+</div>
+
+<!-- JavaScript for Carousel Animation and Read More Toggle -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const track = document.querySelector('.carousel-track-wrapper > .flex');
+        const prevButton = document.querySelector('[aria-label="Previous"]');
+        const nextButton = document.querySelector('[aria-label="Next"]');
+
+        let currentSlide = 0;
+        let direction = 1; // 1 means right, -1 means left
+
+        // Function to update the carousel position
+        function updateCarousel() {
+            const itemWidth = track.children[0].offsetWidth + 16; // Includes gap
+            const maxSlide = track.children.length - Math.floor(track.offsetWidth / itemWidth);
+            currentSlide = Math.max(0, Math.min(currentSlide, maxSlide));
+            track.style.transform = `translateX(-${currentSlide * itemWidth}px)`;
+        }
+
+        // Function to animate the carousel automatically from left to right and then reverse
+        function animateCarousel() {
+            const itemWidth = track.children[0].offsetWidth + 16; // Includes gap
+            const maxSlide = track.children.length - Math.floor(track.offsetWidth / itemWidth);
+
+            // Update slide index based on the direction
+            currentSlide += direction;
+
+            // Reverse direction if reaching the ends
+            if (currentSlide >= maxSlide || currentSlide <= 0) {
+                direction *= -1;
+            }
+
+            // Update transform for sliding animation
+            track.style.transform = `translateX(-${currentSlide * itemWidth}px)`;
+        }
+
+        // Set interval for automatic bidirectional animation
+        setInterval(animateCarousel, 2000); // Adjust time to control speed
+
+        // Click event for manual control with previous button
+        prevButton.addEventListener('click', () => {
+            currentSlide--;
+            updateCarousel();
+        });
+
+        // Click event for manual control with next button
+        nextButton.addEventListener('click', () => {
+            currentSlide++;
+            updateCarousel();
+        });
+
+        // Function to toggle Read More functionality
+        window.toggleReadMore = function (id) {
+            var dots = document.getElementById("dots" + id);
+            var moreText = document.getElementById("more" + id);
+            var btnText = document.querySelector(`[onclick="toggleReadMore(${id})"]`);
+
+            if (dots.classList.contains('hidden')) {
+                dots.classList.remove('hidden');
+                btnText.innerHTML = "Read more";
+                moreText.classList.add('hidden');
+            } else {
+                dots.classList.add('hidden');
+                btnText.innerHTML = "Hide";
+                moreText.classList.remove('hidden');
+            }
+        }
+
+        // Update carousel on window resize
+        window.addEventListener('resize', updateCarousel);
+    });
+</script>
+
+</body>
+</html>
+
